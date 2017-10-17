@@ -4,6 +4,7 @@
   "description": "A simple implementation of a registration system",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/msuzio/registration-demo-simple/issues"
   },
-  "homepage": "https://github.com/msuzio/registration-demo-simple#readme"
+  "homepage": "https://github.com/msuzio/registration-demo-simple#readme",
+  "dependencies": {
+    "dateformat": "^3.0.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "mongo": "^0.1.0"
+  }
 }
