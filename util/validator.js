@@ -39,30 +39,18 @@ module.exports = (function() {
             var zipError = 'Zip code must be numeric "DDDDD" or "DDDDD-DDDD"';
 
             var zipCode = data["zipCode"];
+            var zipregEx = /^\d{5}(\-\d{4})?$/;
             var zipOK = true;
-            if (!zipCode) {
-                zipOK = false;
+            if (zipCode) {
+                zipOK = zipregEx.test(zipCode);
             } else {
-                var dashPos = zipCode.indexOf('-');
-                if (dashPos > 0) {
-                    // split two sections
-                    var zip5 = zipCode.substring(0,dashPos);
-                    var zip4 = zipCode.substring(dashPos+1);
-                    
-                    // each must be of the right size and coercable to a number
-                    if (zip5.length != 5 || isNotNumeric(zip5) ) {
-                        zipOK = false;
-                    }
-                } else {
-                    if (zipCode.length != 5 || isNotNumeric(zip5)) {
-                        zipOK = false;
-                    }
-                }
+                zipOK = false;
             }
-
-            if(!zipOK) {
+            
+            if (!zipOK) {
                 errors["zipCode"] = zipError;
             }
+
     } else {
         errors["INVALID"] = "Empty data cannot be provided";
     }

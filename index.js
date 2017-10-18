@@ -18,10 +18,14 @@ const validator = require("./util/validator.js");
 const app = express();
 
 // configuration constants; should move to a properties file
+// page and route data
 const REGISTER_TITLE = "Registration";
 const REGISTER_PATH = "/register";
 const REGISTER_VIEW = "register";
 const REGISTER_STYLE = "styles/register.css";
+const VALIDATION_ERROR = "Failed to create new attendee.";
+const SAVE_ERROR =  "Error saving new attendee";
+
 const ATTENDEES_COLLECTION = "attendees";
 
 
@@ -52,7 +56,11 @@ app.set('view engine', 'handlebars');
 
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
-    res.status(code || 500).json({"error": message});
+    var errData = {"error": message };
+    if (code) {
+        errData.details = code;
+    }
+    res.status(code || 500).json(errData);
 }
 
 app.get('/', function (req, res) {
@@ -76,7 +84,7 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
     if(Object.keys(validationErrors).length == 0) {
     db.collection(ATTENDEES_COLLECTION).insertOne(newAttendee, function(err, doc) {
         if (err) {
-            handleError(res, err.message, "Failed to create new attendee.");
+            handleError(res,SAVE_ERROR, err.message);
         } else {
             // succeded; display confirmation page
             res.render('confirmation', {
@@ -84,15 +92,16 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
                 stylesheet: "styles/confirmation.css",
                 attendee: doc.ops[0]
             });
-        }
+        } 
     });
     } else {
-        res.render(REGISTER_VIEW, {
-            title: REGISTER_TITLE,
-            states: stateAbbrevs,
-            stylesheet: REGISTER_STYLE,
-            errors: validationErrors
-        });
+        handleError(res,VALIDATION_ERROR,validationErrors);
+        // res.render(REGISTER_VIEW, {
+        //     title: REGISTER_TITLE,
+        //     states: stateAbbrevs,
+        //     stylesheet: REGISTER_STYLE,
+        //     errors: validationErrors
+        // });
     }
 }
 );
@@ -102,7 +111,10 @@ app.get('/report', function(req,res) {
         if (err) {
             handleError(res, err.message, "Failed to get attendee list");
         } else {
-            console.log(JSON.stringify(docs));
+            //
+            // sort
+            //
+            docs.sort(compareDates);
             res.render("attendee-list", {
                 title: "attendee List",
                 stylesheet: "styles/attendee-list.css",
@@ -137,3 +149,21 @@ function Attendee (data) {
     this.registerDate = now;
     this.formattedRegisterDate = dateFormat(now,"yyyy-mm-dd HH:MM:ss");
 }
+
+function compareDates(a,b) {
+    if (a && a["registerDate"]) {
+        if (b && b["registerDate"]) {
+            if (a == b) {
+              return 0;
+            } else  {
+              return a["registerDate"] < b["registerDate"] ? 1:-1;
+            }
+        } else {
+            // no b -- sort lower
+            return 1;
+        }
+    } else {
+        // no a -- sort a lower
+        return -1;
+    }
+};
