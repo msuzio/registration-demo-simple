@@ -115,7 +115,7 @@ app.post(CONFIRMATION_PATH, urlencodedParser, function(req,res) {
 }
 );
 
-app.get(, function(req,res) {
+app.get(REPORT_PATH, function(req,res) {
     db.collection(ATTENDEES_COLLECTION).find({}).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message,FIND_ERROR);
@@ -124,9 +124,9 @@ app.get(, function(req,res) {
             // sort by reverse date
             //
             docs.sort(compareDates);
-            res.render("attendee-list", {
-                title: "attendee List",
-                stylesheet: "styles/attendee-list.css",
+            res.render(REPORT_VIEW, {
+                title: REPORT_TITLE,
+                stylesheet: REPORT_STYLE,
                 attendees: docs 
             });
         }

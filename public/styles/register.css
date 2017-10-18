@@ -32,7 +32,7 @@ input:valid {
   }
 
   .simple-form input:required {
-    border-color: rgb(13, 150, 13);
+    border: 2px solid rgb(13, 150, 13);
   }
   .simple-form input:invalid {
     border: 2px solid rgb(247, 63, 63);
