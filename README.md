@@ -20,7 +20,7 @@ A purely server-side implementation of a registration system
   * The code is not as modular, nice, or up to ES6 standards as it could be. Babel support needs to be integrated.
   * Formal test cases are lacking (non-existent)
     * Sample valid and invalid POST data templates usable with [Curl](https://curl.haxx.se/) are available in the test/ directory. 
-    * test scripts ran against discrete functions suxch as the sorting asnd server-side validation have not been added to the repository.
+    * Test scripts ran against discrete functions such as the sorting and server-side validation have not been added to the repository.
   * CSS styling isn't quite right; the current development team needs a UI collaborator
    * Layout, while functional, shows gaps. Compromise has been made to pushout the minimum viable product
 
