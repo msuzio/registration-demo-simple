@@ -22,6 +22,6 @@
     "dateformat": "^3.0.2",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
-    "mongo": "^0.1.0"
+    "mongodb": "^2.2.33"
   }
 }
