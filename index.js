@@ -137,6 +137,12 @@ const staticDir = __dirname + "/public";
 console.log(staticDir);
 app.use(express.static(staticDir));
 
+// default route; can't test this yet (no Heroku connection ATM), but this is essentially the missing code. 
+// Just tie this to a nice template in addition to the 404 code
+// app.use(function(req, res){
+//        res.send(404);
+// });
+
 // Not the best handling; informative for testing with curl, though
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
