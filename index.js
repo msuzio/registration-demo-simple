@@ -21,20 +21,19 @@ const app = express();
 
 // configuration constants; should move to a properties file perhaps?
 // page and route data
-const REPORT_PATH = "/report";
-const REPORT_VIEW = "report";
-const REPORT_TITLE = "Attendee Report";
-const REPORT_STYLE = "styles/report.css";
-const CONFIRMATION_VIEW = "confirmation";
-const CONFIRMATION_TITLE = "Registration Confirmation";
-const CONFIRMATION_STYLE = "styles/confirmation.css";
-const REPORT_VIEW = "report";
-const REPORT_TITLE = "Attendee Report";
-const REPORT_CSS = "styles/report.css";
 const REGISTER_TITLE = "Registration";
 const REGISTER_PATH = "/register";
 const REGISTER_VIEW = "register";
 const REGISTER_STYLE = "styles/register.css";
+
+const REPORT_PATH = "/report";
+const REPORT_VIEW = "report";
+const REPORT_TITLE = "Attendee Report";
+const REPORT_STYLE = "styles/report.css";
+const CONFIRMATION_PATH = REGISTER_PATH;
+const CONFIRMATION_VIEW = "confirmation";
+const CONFIRMATION_TITLE = "Registration Confirmation";
+const CONFIRMATION_STYLE = "styles/confirmation.css";
 
 // Messages
 const VALIDATION_ERROR = "Failed to create new attendee.";
@@ -69,15 +68,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.engine("handlebars", exphbs({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 
-function handleError(res, reason, message, code) {
-    console.log("ERROR: " + reason);
-    var errData = {"error": message };
-    if (code) {
-        errData.details = code;
-    }
-    res.status(500).json(errData);
-}
-
 app.get("/", function (req, res) {
     res.redirect(REGISTER_PATH);
 });
@@ -90,7 +80,11 @@ app.get(REGISTER_PATH,  function(req,res) {
     });
 });
 
-app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
+// Handle posts to the register URL -- cannot GET against the data, 
+// Only post from client-side validation form, and we do 
+// server-side validation so, theoretically,
+// we should never try to save bad data
+app.post(CONFIRMATION_PATH, urlencodedParser, function(req,res) {
     var posted = req.body;  
     console.log(posted);
 
@@ -101,7 +95,7 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
         if (err) {
             handleError(res,err.message,SAVE_ERROR);
         } else {
-            // succeded; display confirmation page
+            // success; display confirmation page
             res.render(CONFIRMATION_VIEW, {
                 title: CONFIRMATION_TITLE,
                 stylesheet: CONFIRMATION_STYLE,
@@ -139,10 +133,19 @@ app.get(, function(req,res) {
     });
 });
 
-console.log(__dirname);
 const staticDir = __dirname + "/public";
 console.log(staticDir);
 app.use(express.static(staticDir));
+
+// Not the best handling; informative for testing with curl, though
+function handleError(res, reason, message, code) {
+    console.log("ERROR: " + reason);
+    var errData = {"error": message };
+    if (code) {
+        errData.details = code;
+    }
+    res.status(500).json(errData);
+}
 
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
