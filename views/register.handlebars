@@ -54,7 +54,9 @@
         <div class="col-sm-2">
             <span class="pull-left"><label for="state">State: </label>        
             <select name="state" id="state" autocomplete="on">
-            <option value="MI">MI</option>
+              {{#each states}}
+              <option value="{{this}}">{{this}}</option>
+              {{/each}}
           </select>
           </span>
         </div>

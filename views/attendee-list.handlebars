@@ -1,4 +1,4 @@
-<!-- table of attendees -->
+<!-- table of thiss -->
 <div class="banner bg-primary"><h2>Attendee Report</h2></div>
 <div class="table-responsive">
 <table class="table-bordered table-hover">
@@ -17,17 +17,19 @@
     </tr>
   </thead>
   <tbody>
+  {{#each attendees}}
       <tr>
-          <td>xxxxxx</td>
-          <td>xxxxxxx</td>
-          <td>1111 First Street</td>
-          <td></td>
-          <td>Beverly Hills</td>
-          <td>CA</td>
-          <td>90210</td>
-          <td>US</td>
-          <td>2017-10-17 08:00PM EDT</td>
+          <td>{{{ this.firstName }}}</td>
+          <td>{{{ this.lastName }}}</td>
+          <td>{{{ this.address }}}</td>
+          <td>{{{ this.address2 }}}</td>
+          <td>{{{ this.city }}}</td>
+          <td>{{{ this.state }}}</td>
+          <td>{{{ this.zipCode }}}</td>
+          <td>{{{ this.country }}}</td>
+          <td>{{{ this.formattedRegisterDate }}}</td>
       </tr>
+      {{/each}}
   </tbody>
 </table>
 </div>
