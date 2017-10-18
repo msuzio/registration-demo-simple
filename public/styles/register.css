@@ -1,2 +1,40 @@
 /* .row {margin:10px; border: 10px solid black } */
 .submit-area { margin-top:20px;  text-align: center}
+
+/* input:invalid {
+    border: 2px dashed red;
+}
+  
+input:valid {
+    border: 2px solid black;
+} */
+
+.simple-form {
+    display: flex;
+    overflow-y: scroll;
+    padding-bottom: 1.25rem;
+  }
+  .simple-form input {
+    margin: 0 .25rem;
+    min-width: 125px;
+    border: 1px solid rgb(12, 0, 0);
+   /* border-left: 3px solid; */
+    border-radius: 5px;
+    transition: border-color .5s ease-out;
+  }
+  .simple-form input:valid {
+    /* border-left-color: rgb(245, 37, 14); */
+    border: 2px solid rgb(30, 255, 0);
+  }
+
+  .simple-form input:optional {
+    border:1px solid rgb(79, 80, 85);
+  }
+
+  .simple-form input:required {
+    border-color: rgb(13, 150, 13);
+  }
+  .simple-form input:invalid {
+    border: 2px solid rgb(247, 63, 63);
+  }
+

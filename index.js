@@ -19,12 +19,24 @@ stateAbbrevs.sort();
 const validator = require("./util/validator.js");
 const app = express();
 
-// configuration constants; should move to a properties file
+// configuration constants; should move to a properties file perhaps?
 // page and route data
+const REPORT_PATH = "/report";
+const REPORT_VIEW = "report";
+const REPORT_TITLE = "Attendee Report";
+const REPORT_STYLE = "styles/report.css";
+const CONFIRMATION_VIEW = "confirmation";
+const CONFIRMATION_TITLE = "Registration Confirmation";
+const CONFIRMATION_STYLE = "styles/confirmation.css";
+const REPORT_VIEW = "report";
+const REPORT_TITLE = "Attendee Report";
+const REPORT_CSS = "styles/report.css";
 const REGISTER_TITLE = "Registration";
 const REGISTER_PATH = "/register";
 const REGISTER_VIEW = "register";
 const REGISTER_STYLE = "styles/register.css";
+
+// Messages
 const VALIDATION_ERROR = "Failed to create new attendee.";
 const SAVE_ERROR =  "Error saving new attendee";
 const FIND_ERROR = "Failed to get attendee list";
@@ -32,10 +44,10 @@ const FIND_ERROR = "Failed to get attendee list";
 const ATTENDEES_COLLECTION = "attendees";
 
 
-app.set('port', (process.env.PORT || 5000));
+app.set("port", (process.env.PORT || 5000));
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
-const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/myproject'; 
+const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017/myproject"; 
 
 
 var db;
@@ -46,16 +58,16 @@ mongodb.MongoClient.connect(mongoUrl,
             process.exit(1);
         }
         // database object is deliberate global so it is usuable 
-        // throughout the application and we don't continuously reconnect.
-        // Don't like it at all; should wrap this in a service module.
+        // throughout the application and we don"t continuously reconnect.
+        // Don"t like it at all; should wrap this in a service module.
         console.log("Database connection ready");
         db = database;
 });
 
 // parse application/x-www-form-urlencoded 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
+app.set("view engine", "handlebars");
 
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
@@ -63,10 +75,10 @@ function handleError(res, reason, message, code) {
     if (code) {
         errData.details = code;
     }
-    res.status(code || 500).json(errData);
+    res.status(500).json(errData);
 }
 
-app.get('/', function (req, res) {
+app.get("/", function (req, res) {
     res.redirect(REGISTER_PATH);
 });
 
@@ -90,26 +102,26 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
             handleError(res,err.message,SAVE_ERROR);
         } else {
             // succeded; display confirmation page
-            res.render('confirmation', {
-                title: 'Registration Confirmation',
-                stylesheet: "styles/confirmation.css",
+            res.render(CONFIRMATION_VIEW, {
+                title: CONFIRMATION_TITLE,
+                stylesheet: CONFIRMATION_STYLE,
                 attendee: doc.ops[0]
             });
         } 
     });
     } else {
-        handleError(res,SAVE_ERROR,VALIDATION_ERROR,validationErrors);
-        // res.render(REGISTER_VIEW, {
-        //     title: REGISTER_TITLE,
-        //     states: stateAbbrevs,
-        //     stylesheet: REGISTER_STYLE,
-        //     errors: validationErrors
-        // });
+        // handleError(res,SAVE_ERROR,VALIDATION_ERROR,validationErrors);
+        res.render(REGISTER_VIEW, {
+            title: REGISTER_TITLE,
+            states: stateAbbrevs,
+            stylesheet: REGISTER_STYLE,
+            errors: validationErrors
+        });
     }
 }
 );
 
-app.get('/report', function(req,res) {
+app.get(, function(req,res) {
     db.collection(ATTENDEES_COLLECTION).find({}).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message,FIND_ERROR);
