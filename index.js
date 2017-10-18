@@ -12,6 +12,7 @@ app.set('port', (process.env.PORT || 5000));
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 // parse application/json 
 var jsonParser = bodyParser.json();
+app.set('view engine', 'ejs');
 
 
 app.get('/', function (req, res) {
@@ -19,11 +20,16 @@ app.get('/', function (req, res) {
 });
 
 app.get('/register',  function(req,res) {
-    res.status(200).send("On registration page");
+    res.render('register');
+});
+
+app.post('/register', urlencodedParser, function(req,res) {
+    console.log("Posted");
+    res.status(200).send("Processing registration" + JSON.stringify(req.params,null,2));
 });
 
 app.get('/report', function(req,res) {
-    res.status(200).send("On report Page");
+    res.render("attendee-list");
 });
 
 app.listen(app.get('port'), function() {
