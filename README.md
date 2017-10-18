@@ -2,8 +2,8 @@
 A purely server-side implementation of a registration system
 
 # Links
-[Register](https://young-eyrie-86802.herokuapp.com/)
-[Attendee Report](https://young-eyrie-86802.herokuapp.com/report)
+  * [Register](https://young-eyrie-86802.herokuapp.com/)
+  * [Attendee Report](https://young-eyrie-86802.herokuapp.com/report)
 
 # Comments
  * The implementation uses an [Express](https://expressjs.com/) server with the [HandleBars](http://handlebarsjs.com/) templating engine, hosted in the cloud with [Heroku](https://dashboard.heroku.com)
