@@ -14,6 +14,8 @@ const dateFormat = require('dateformat');
 // invert our states mapping; we only want abbreviations in our form, 
 // as they're our hash key for vaslidation back
 const stateAbbrevs = Object.keys(states);
+stateAbbrevs.sort();
+
 const validator = require("./util/validator.js");
 const app = express();
 
@@ -25,6 +27,7 @@ const REGISTER_VIEW = "register";
 const REGISTER_STYLE = "styles/register.css";
 const VALIDATION_ERROR = "Failed to create new attendee.";
 const SAVE_ERROR =  "Error saving new attendee";
+const FIND_ERROR = "Failed to get attendee list";
 
 const ATTENDEES_COLLECTION = "attendees";
 
@@ -84,7 +87,7 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
     if(Object.keys(validationErrors).length == 0) {
     db.collection(ATTENDEES_COLLECTION).insertOne(newAttendee, function(err, doc) {
         if (err) {
-            handleError(res,SAVE_ERROR, err.message);
+            handleError(res,err.message,SAVE_ERROR);
         } else {
             // succeded; display confirmation page
             res.render('confirmation', {
@@ -95,7 +98,7 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
         } 
     });
     } else {
-        handleError(res,VALIDATION_ERROR,validationErrors);
+        handleError(res,SAVE_ERROR,VALIDATION_ERROR,validationErrors);
         // res.render(REGISTER_VIEW, {
         //     title: REGISTER_TITLE,
         //     states: stateAbbrevs,
@@ -109,10 +112,10 @@ app.post(REGISTER_PATH, urlencodedParser, function(req,res) {
 app.get('/report', function(req,res) {
     db.collection(ATTENDEES_COLLECTION).find({}).toArray(function(err, docs) {
         if (err) {
-            handleError(res, err.message, "Failed to get attendee list");
+            handleError(res, err.message,FIND_ERROR);
         } else {
             //
-            // sort
+            // sort by reverse date
             //
             docs.sort(compareDates);
             res.render("attendee-list", {

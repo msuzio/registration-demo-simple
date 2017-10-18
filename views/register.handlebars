@@ -1,8 +1,7 @@
 <div class="banner bg-primary"><h2>Registration</h2></div>
-
 <form method="POST" action="/register">
-    <div class="bordered padded">
-    <div class=".container-fluid">
+    <div class="bordered margin-offset">
+    <div class="container-fluid">
       <!-- first name -->
       <div class="row">
       <div class="form-group">
@@ -10,7 +9,7 @@
             <span class="pull-left"><label for="firstName">First Name: </label></span>
           </div>
           <div class="col-sm-4">
-              <span class="pull-left"><input type="text" class="form-control" name="firstName" id = "firstName" autocomplete="on"/></span>
+              <span class="pull-left"><input type="text" class="form-control" name="firstName" id = "firstName" autocomplete="on" required/></span>
           </div>
       </div>
       </div>
@@ -22,7 +21,7 @@
             <span class="pull-left"><label for="lastName">Last Name: </label></span>
           </div>
           <div class="col-sm-4">
-              <span class="pull-left"><input class="form-control" type="text" name="lastName" id = "lastName" autocomplete="on"/></span>
+              <span class="pull-left"><input class="form-control" type="text" name="lastName" id = "lastName" autocomplete="on" required/></span>
           </div>
       </div>
       </div>
@@ -34,7 +33,7 @@
           <span class="pull-left"><label for="address">Address: </label></span>
         </div>
         <div class="col-sm-4">
-            <span class="pull-left"><input class="form-control" type="text" name="address" id = "address" autocomplete="on"/></span>
+            <span class="pull-left"><input class="form-control" type="text" name="address" id = "address" autocomplete="on" required/></span>
         </div>
       </div>
       </div>
@@ -74,7 +73,7 @@
         <div class="col-sm-4">
           <div class="form-group">
             <span class="pull-left"><label for="state">State: </label>        
-            <select class="form-control" name="state" id="state" autocomplete="on">
+            <select class="form-control" name="state" id="state" autocomplete="on" required>
               {{#each states}}
               <option value="{{this}}">{{this}}</option>
               {{/each}}
@@ -99,6 +98,10 @@
     </div>
     </div>
 </form>
-<div>
-  {{{errors}}}
-</div>
+<script>
+  hyperform(window, {
+  revalidate: 'hybrid',
+  preventImplicitSubmit: true,
+  validEvent: false,
+});
+</script>
