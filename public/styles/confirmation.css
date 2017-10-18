@@ -1,4 +1,5 @@
-/* .row {margin:10px; border: 10px solid black } */
+.row {margin:10px; border: 2px solid black;  padding: 5px} 
+
 /*
 .container {
     margin-top:10px;
