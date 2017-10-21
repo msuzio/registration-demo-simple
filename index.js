@@ -152,7 +152,7 @@ app.use(express.static(staticDir, {
 
 // default route
 app.use(function(req, res,next) {
-    var idx = Math.ceil((Math.random() * 3))-1;
+    var idx = Math.ceil((Math.random() * NOT_FOUND_TITLES.length))-1;
     var not_found = NOT_FOUND_TITLES[idx];
        res.render(NOT_FOUND_VIEW, {
            title: not_found,
