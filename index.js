@@ -188,7 +188,7 @@ function Attendee (data) {
     this.zipCode = data["zipCode"];
     var now = new Date();
     this.registerDate = now;
-    this.formattedRegisterDate = dateFormat(now,"yyyy-mm-dd HH:MM:ss");
+    this.formattedRegisterDate = dateFormat(now,"yyyy-mm-dd HH:MM:ss Z");
 }
 
 function compareDates(a,b) {
