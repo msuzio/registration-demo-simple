@@ -34,6 +34,16 @@ const CONFIRMATION_PATH = REGISTER_PATH;
 const CONFIRMATION_VIEW = "confirmation";
 const CONFIRMATION_TITLE = "Registration Confirmation";
 const CONFIRMATION_STYLE = "styles/confirmation.css";
+const NOT_FOUND_VIEW  = "404";
+const NOT_FOUND_STYLE  = "404";
+const NOT_FOUND_TITLES = [
+    "Je ne peux pas le trouver",
+    "Non lo trovo",
+    "no puedo encontrarlo",
+    "nad oes modd i ddod o hyd iddo",
+    "я не могу найти его",
+    "Watashi wa sore o mitsukeru koto ga dekimasen"
+];
 
 // Messages
 const VALIDATION_ERROR = "Failed to create new attendee.";
@@ -135,13 +145,20 @@ app.get(REPORT_PATH, function(req,res) {
 
 const staticDir = __dirname + "/public";
 console.log(staticDir);
-app.use(express.static(staticDir));
+app.use(express.static(staticDir, {
+    fallthrough: true
+}));
 
-// default route; can't test this yet (no Heroku connection ATM), but this is essentially the missing code. 
-// Just tie this to a nice template in addition to the 404 code
-// app.use(function(req, res){
-//        res.send(404);
-// });
+
+// default route
+app.use(function(req, res,next) {
+    var idx = Math.ceil((Math.random() * 3))-1;
+    var not_found = NOT_FOUND_TITLES[idx];
+       res.render(NOT_FOUND_VIEW, {
+           title: not_found,
+           stylesheet: NOT_FOUND_STYLE,
+       });
+});
 
 // Not the best handling; informative for testing with curl, though
 function handleError(res, reason, message, code) {
